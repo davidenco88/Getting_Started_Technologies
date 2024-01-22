@@ -18,7 +18,7 @@ io.on("connection", (socket) => {
   console.log("Indentify user connection");
 
   socket.on("chat message", (msg) => {
-    console.log(`message: ${msg}`);
+    io.emit("chat message", msg);
   });
 
   socket.on("disconnect", () => {
