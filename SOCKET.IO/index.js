@@ -24,10 +24,9 @@ await db.exec(`
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
-  connectionStateRecovery: {},
+  //connectionStateRecovery: {},
 });
 
-// utiliza la convensión de Node.js para nombrar variables especiales
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.get("/", (req, res) => {
@@ -35,8 +34,6 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", async (socket) => {
-  console.log("Indentify user connection");
-
   socket.on("chat message", async (msg) => {
     let result;
     try {
@@ -49,6 +46,8 @@ io.on("connection", async (socket) => {
     // include the offset with the message
     io.emit("chat message", msg, result.lastID);
   });
+
+  console.log(socket);
 
   if (!socket.recovered) {
     // if the connection state recovery was not successful
@@ -64,10 +63,6 @@ io.on("connection", async (socket) => {
       // something went wrong
     }
   }
-
-  socket.on("disconnect", () => {
-    console.log("Indentify user disconnection");
-  });
 });
 
 const PORT = process.env.PORT ?? 3000;
